@@ -1,0 +1,27 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    // 继承其他的 eslint 的配置
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "overrides": [
+    ],
+    // 用什么样的规则把 ts 解析成 AST
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        // 解析什么版本的 js 代码
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        // 规则的一些合集
+        "@typescript-eslint"
+    ], 
+    // 具体的一些规则
+    "rules": {
+    }
+}
