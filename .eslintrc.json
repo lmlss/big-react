@@ -1,14 +1,15 @@
 {
     "env": {
         "browser": true,
-        "es2021": true
+        "es2021": true,
+        "node": true
     },
     // 继承其他的 eslint 的配置
     "extends": [
         "eslint:recommended",
-        "plugin:@typescript-eslint/recommended"
-    ],
-    "overrides": [
+        "plugin:@typescript-eslint/recommended",
+        "prettier",
+        "plugin:prettier/recommended"
     ],
     // 用什么样的规则把 ts 解析成 AST
     "parser": "@typescript-eslint/parser",
@@ -19,9 +20,14 @@
     },
     "plugins": [
         // 规则的一些合集
-        "@typescript-eslint"
-    ], 
+        "@typescript-eslint",
+        "prettier"
+    ],
     // 具体的一些规则
     "rules": {
+        "prettier/prettier": "error",
+        "no-case-declarations": "off",
+        "no-constant-condition": "off",
+        "@typescript-eslint/ban-ts-comment": "off"
     }
 }
