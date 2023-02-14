@@ -7,7 +7,7 @@ export interface Update<State> {
 
 export interface UpdateQueue<State> {
 	shared: {
-		pending: Update<State> | null;
+		pending: Update<State> | null; // 这样可以使用同一个 UpdateQueue
 	};
 }
 
