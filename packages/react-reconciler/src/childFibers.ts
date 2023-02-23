@@ -34,7 +34,7 @@ function ChildReconciler(shouldTrackEffects: boolean) {
 
 	return function reconcileChildFibers(
 		returnFiber: FiberNode,
-		currentFiber: FiberNode,
+		currentFiber: FiberNode | null,
 		newChild?: ReactElementType
 	) {
 		// 判断当前 fiber 的类型
