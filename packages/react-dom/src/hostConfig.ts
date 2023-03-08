@@ -1,8 +1,8 @@
-import { DOMElement } from 'react';
+// import { DOMElement } from 'react';
 import { FiberNode } from 'react-reconciler/src/fiber';
 import { HostText } from 'react-reconciler/src/workTags';
 import { Props } from 'shared/ReactTypes';
-import { updateFiberProps } from './SyntheticEvent';
+import { DOMElement, updateFiberProps } from './SyntheticEvent';
 
 export type Container = Element;
 export type Instance = Element;
@@ -51,4 +51,12 @@ export function removeChild(
 	container: Container
 ) {
 	container.removeChild(child);
+}
+
+export function insertChildToContainer(
+	child: Instance,
+	container: Container,
+	before: Instance
+) {
+	container.insertBefore(child, before);
 }
