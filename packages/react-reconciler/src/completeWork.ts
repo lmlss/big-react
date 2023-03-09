@@ -11,7 +11,8 @@ import {
 	FunctionComponent,
 	HostComponent,
 	HostRoot,
-	HostText
+	HostText,
+	Fragment
 } from './workTags';
 
 function markUpdate(fiber: FiberNode) {
@@ -61,8 +62,7 @@ export const completeWork = (wip: FiberNode) => {
 			bubbleProperties(wip);
 			return null;
 		case HostRoot:
-			bubbleProperties(wip);
-			return null;
+		case Fragment:
 		case FunctionComponent:
 			bubbleProperties(wip);
 			return null;
