@@ -1,4 +1,4 @@
-import { Container } from 'react-dom/src/hostConfig';
+import { Container } from 'hostConfig';
 import { ReactElementType } from 'shared/ReactTypes';
 import { FiberNode, FiberRootNode } from './fiber';
 import { requestUpdateLane } from './fiberLanes';

@@ -15,9 +15,8 @@ export const resolveDispatcher = (): Dispatcher => {
 	const dispatcher = currentDispatcher.current;
 
 	if (dispatcher === null) {
-		throw Error('hook 只能在函数组件中执行');
+		throw new Error('hook只能在函数组件中执行');
 	}
-
 	return dispatcher;
 };
 

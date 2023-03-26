@@ -5,16 +5,16 @@ import { renderWithHooks } from './fiberHooks';
 import { Lane } from './fiberLanes';
 import { processUpdateQueue, UpdateQueue } from './updateQueue';
 import {
+	Fragment,
 	FunctionComponent,
 	HostComponent,
 	HostRoot,
-	HostText,
-	Fragment
+	HostText
 } from './workTags';
 
 // 递归中的递阶段
 export const beginWork = (wip: FiberNode, renderLane: Lane) => {
-	// 比较, 返回子 fiberNode
+	// 比较，返回子fiberNode
 	switch (wip.tag) {
 		case HostRoot:
 			return updateHostRoot(wip, renderLane);
@@ -28,7 +28,7 @@ export const beginWork = (wip: FiberNode, renderLane: Lane) => {
 			return updateFragment(wip);
 		default:
 			if (__DEV__) {
-				console.warn('beginWork 未实现的类型');
+				console.warn('beginWork未实现的类型');
 			}
 			break;
 	}

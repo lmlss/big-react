@@ -16,7 +16,7 @@ export function flushSyncCallbacks() {
 			syncQueue.forEach((callback) => callback());
 		} catch (e) {
 			if (__DEV__) {
-				console.error('flushSyncCallbacks 报错', e);
+				console.error('flushSyncCallbacks报错', e);
 			}
 		} finally {
 			isFlushingSyncQueue = false;

@@ -5,30 +5,28 @@
         "node": true,
         "jest": true
     },
-    // 继承其他的 eslint 的配置
-    "extends": [
+    "extends": [ // 继承其他的 eslint 的配置
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
         "prettier",
         "plugin:prettier/recommended"
     ],
-    // 用什么样的规则把 ts 解析成 AST
-    "parser": "@typescript-eslint/parser",
+    "parser": "@typescript-eslint/parser", // 用什么样的规则把 ts 解析成 AST
     "parserOptions": {
-        // 解析什么版本的 js 代码
-        "ecmaVersion": "latest",
+        "ecmaVersion": "latest", // 解析什么版本的 js 代码
         "sourceType": "module"
     },
-    "plugins": [
-        // 规则的一些合集
+    "plugins": [ // 规则的一些合集
         "@typescript-eslint",
         "prettier"
     ],
-    // 具体的一些规则
-    "rules": {
+    "rules": { // 具体的一些规则
         "prettier/prettier": "error",
         "no-case-declarations": "off",
         "no-constant-condition": "off",
-        "@typescript-eslint/ban-ts-comment": "off"
+        "@typescript-eslint/ban-ts-comment": "off",
+        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-var-requires": "off",
+        "no-unused-vars": "off"
     }
 }

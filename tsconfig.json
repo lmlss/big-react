@@ -22,8 +22,7 @@
         "noUnusedParameters": false,
         "noImplicitReturns": false,
         "skipLibCheck": true,
-        // ts 基础入口
-        "baseUrl": "./packages",
+        "baseUrl": "./packages", // ts 基础入口
         "paths": {
             "hostConfig": [
                 "./react-dom/src/hostConfig.ts"

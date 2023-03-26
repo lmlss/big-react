@@ -1,17 +1,16 @@
 import { Dispatch } from 'react/src/currentDispatcher';
 import { Action } from 'shared/ReactTypes';
-import { Update } from './fiberFlags';
 import { Lane } from './fiberLanes';
 
 export interface Update<State> {
 	action: Action<State>;
-	next: Update<any> | null;
 	lane: Lane;
+	next: Update<any> | null;
 }
 
 export interface UpdateQueue<State> {
 	shared: {
-		pending: Update<State> | null; // 这样可以使用同一个 UpdateQueue
+		pending: Update<State> | null;
 	};
 	dispatch: Dispatch<State> | null;
 }
@@ -63,7 +62,7 @@ export const processUpdateQueue = <State>(
 	};
 
 	if (pendingUpdate !== null) {
-		// 第一个 update
+		// 第一个update
 		const first = pendingUpdate.next;
 		let pending = pendingUpdate.next as Update<any>;
 		do {
@@ -71,19 +70,18 @@ export const processUpdateQueue = <State>(
 			if (updateLane === renderLane) {
 				const action = pending.action;
 				if (action instanceof Function) {
-					// baseState 1 update 2 -> memoizedState 2
-					baseState = action(baseState);
-					console.log(baseState, 'baseState');
-				} else {
 					// baseState 1 update (x) => 4x -> memoizedState 4
+					baseState = action(baseState);
+				} else {
+					// baseState 1 update 2 -> memoizedState 2
 					baseState = action;
 				}
 			} else {
 				if (__DEV__) {
-					console.error('不应该进入 updateLane !== renderLane 逻辑');
+					console.error('不应该进入updateLane !== renderLane逻辑');
 				}
 			}
-			pending = pending?.next as Update<any>;
+			pending = pending.next as Update<any>;
 		} while (pending !== first);
 	}
 	result.memoizedState = baseState;

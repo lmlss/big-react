@@ -1,13 +1,14 @@
-// jsx 返回的是一个 ReactElement 的数组
 import { REACT_ELEMENT_TYPE, REACT_FRAGMENT_TYPE } from 'shared/ReactSymbols';
 import {
 	Type,
 	Key,
 	Ref,
 	Props,
-	ElementType,
-	ReactElementType
+	ReactElementType,
+	ElementType
 } from 'shared/ReactTypes';
+
+// ReactElement
 
 const ReactElement = function (
 	type: Type,
@@ -21,9 +22,8 @@ const ReactElement = function (
 		key,
 		ref,
 		props,
-		__mark: 'Ben'
+		__mark: 'KaSong'
 	};
-
 	return element;
 };
 

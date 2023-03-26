@@ -1,18 +1,19 @@
 import { Props, Key, Ref, ReactElementType } from 'shared/ReactTypes';
 import {
+	Fragment,
 	FunctionComponent,
 	HostComponent,
-	WorkTag,
-	Fragment
+	WorkTag
 } from './workTags';
 import { Flags, NoFlags } from './fiberFlags';
-import { Container } from 'react-dom/src/hostConfig';
+import { Container } from 'hostConfig';
 import { Lane, Lanes, NoLane, NoLanes } from './fiberLanes';
 import { Effect } from './fiberHooks';
 
 export class FiberNode {
 	type: any;
 	tag: WorkTag;
+	pendingProps: Props;
 	key: Key;
 	stateNode: any;
 	ref: Ref;
@@ -22,10 +23,9 @@ export class FiberNode {
 	child: FiberNode | null;
 	index: number;
 
-	pendingProps: Props;
 	memoizedProps: Props | null;
 	memoizedState: any;
-	alternate: FiberNode | null; // 用于在 current 的 FiberNode 和 WIP FiberNode 之间切换
+	alternate: FiberNode | null;
 	flags: Flags;
 	subtreeFlags: Flags;
 	updateQueue: unknown;
@@ -35,22 +35,22 @@ export class FiberNode {
 		// 实例
 		this.tag = tag;
 		this.key = key || null;
-		// HostComponent <div> 保存 div DOM
+		// HostComponent <div> div DOM
 		this.stateNode = null;
-		// FiberNode 的类型 FunctionComponent () => {}
+		// FunctionComponent () => {}
 		this.type = null;
 
 		// 构成树状结构
 		this.return = null;
 		this.sibling = null;
 		this.child = null;
-		// <ul>li * 3</ul> 第一个 li 的 index 就是 0
 		this.index = 0;
+
 		this.ref = null;
 
 		// 作为工作单元
-		this.pendingProps = pendingProps; // 这个工作单元刚开始时的 props
-		this.memoizedProps = null; // 工作完了的 props(确定下来的)
+		this.pendingProps = pendingProps;
+		this.memoizedProps = null;
 		this.memoizedState = null;
 		this.updateQueue = null;
 
@@ -71,8 +71,8 @@ export class FiberRootNode {
 	container: Container;
 	current: FiberNode;
 	finishedWork: FiberNode | null;
-	pendingLanes: Lanes; // 所有未被消费的 lane 的集合
-	finishedLane: Lane; // 本次更新消费的 lane
+	pendingLanes: Lanes;
+	finishedLane: Lane;
 	pendingPassiveEffects: PendingPassiveEffects;
 	constructor(container: Container, hostRootFiber: FiberNode) {
 		this.container = container;
@@ -123,10 +123,10 @@ export function createFiberFromElement(element: ReactElementType): FiberNode {
 	let fiberTag: WorkTag = FunctionComponent;
 
 	if (typeof type === 'string') {
-		// <div /> type: 'div'
+		// <div/> type: 'div'
 		fiberTag = HostComponent;
 	} else if (typeof type !== 'function' && __DEV__) {
-		console.warn('未定义的 type 类型', element);
+		console.warn('为定义的type类型', element);
 	}
 	const fiber = new FiberNode(fiberTag, props, key);
 	fiber.type = type;
@@ -134,5 +134,6 @@ export function createFiberFromElement(element: ReactElementType): FiberNode {
 }
 
 export function createFiberFromFragment(elements: any[], key: Key): FiberNode {
-	return new FiberNode(Fragment, elements, key);
+	const fiber = new FiberNode(Fragment, elements, key);
+	return fiber;
 }

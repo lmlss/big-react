@@ -2,16 +2,16 @@ import {
 	appendInitialChild,
 	Container,
 	createInstance,
-	createTextInstance
-} from 'react-dom/src/hostConfig';
-import { updateFiberProps } from 'react-dom/src/SyntheticEvent';
+	createTextInstance,
+	Instance
+} from 'hostConfig';
 import { FiberNode } from './fiber';
 import { NoFlags, Update } from './fiberFlags';
 import {
-	FunctionComponent,
-	HostComponent,
 	HostRoot,
 	HostText,
+	HostComponent,
+	FunctionComponent,
 	Fragment
 } from './workTags';
 
@@ -28,19 +28,17 @@ export const completeWork = (wip: FiberNode) => {
 	switch (wip.tag) {
 		case HostComponent:
 			if (current !== null && wip.stateNode) {
-				// update
-				// 1. props 是否变化 { onClick: xxx } { onClick: xxx }
+				// TODO update
+				// 1. props是否变化 {onClick: xx} {onClick: xxx}
 				// 2. 变了 Update flag
-				// FiberNode.updateQueue = [className, 'aaa', title, 'hahaha']
-				// n key n+1 value
 				// className style
-				updateFiberProps(wip.stateNode, newProps);
+				markUpdate(wip);
 			} else {
 				// mount
-				// 1. 构建 DOM
+				// 1. 构建DOM
 				// const instance = createInstance(wip.type, newProps);
 				const instance = createInstance(wip.type, newProps);
-				// 2. 将 DOM 插入到 DOM 树中
+				// 2. 将DOM插入到DOM树中
 				appendAllChildren(instance, wip);
 				wip.stateNode = instance;
 			}
@@ -49,36 +47,36 @@ export const completeWork = (wip: FiberNode) => {
 		case HostText:
 			if (current !== null && wip.stateNode) {
 				// update
-				const oldText = current.memoizedProps.content;
+				const oldText = current.memoizedProps?.content;
 				const newText = newProps.content;
 				if (oldText !== newText) {
 					markUpdate(wip);
 				}
 			} else {
-				// 构建 DOM
+				// 1. 构建DOM
 				const instance = createTextInstance(newProps.content);
 				wip.stateNode = instance;
 			}
 			bubbleProperties(wip);
 			return null;
 		case HostRoot:
-		case Fragment:
 		case FunctionComponent:
+		case Fragment:
 			bubbleProperties(wip);
 			return null;
 		default:
 			if (__DEV__) {
-				console.warn('未处理的 completeWork 情况', wip);
+				console.warn('未处理的completeWork情况', wip);
 			}
 			break;
 	}
 };
 
-function appendAllChildren(parent: Container, wip: FiberNode) {
+function appendAllChildren(parent: Container | Instance, wip: FiberNode) {
 	let node = wip.child;
 
 	while (node !== null) {
-		if (node?.tag === HostComponent || node.tag === HostText) {
+		if (node.tag === HostComponent || node.tag === HostText) {
 			appendInitialChild(parent, node?.stateNode);
 		} else if (node.child !== null) {
 			node.child.return = node;

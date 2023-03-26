@@ -1,4 +1,4 @@
-// ReactDOM.createRoot(root).render(<App />)
+// ReactDOM.createRoot(root).render(<App/>)
 
 import {
 	createContainer,

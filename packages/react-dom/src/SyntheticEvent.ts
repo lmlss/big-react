@@ -2,7 +2,7 @@ import { Container } from 'hostConfig';
 import { Props } from 'shared/ReactTypes';
 
 export const elementPropsKey = '__props';
-const validEvenTypeList = ['click'];
+const validEventTypeList = ['click'];
 
 type EventCallback = (e: Event) => void;
 
@@ -19,18 +19,18 @@ export interface DOMElement extends Element {
 	[elementPropsKey]: Props;
 }
 
-// dom[xxx] = reactElement props
+// dom[xxx] = reactElemnt props
 export function updateFiberProps(node: DOMElement, props: Props) {
 	node[elementPropsKey] = props;
 }
 
 export function initEvent(container: Container, eventType: string) {
-	if (!validEvenTypeList.includes(eventType)) {
+	if (!validEventTypeList.includes(eventType)) {
 		console.warn('当前不支持', eventType, '事件');
 		return;
 	}
 	if (__DEV__) {
-		console.log('初始化事件: ', eventType);
+		console.log('初始化事件：', eventType);
 	}
 	container.addEventListener(eventType, (e) => {
 		dispatchEvent(container, eventType, e);
@@ -55,22 +55,24 @@ function dispatchEvent(container: Container, eventType: string, e: Event) {
 	const targetElement = e.target;
 
 	if (targetElement === null) {
-		console.warn('事件不存在 target', e);
+		console.warn('事件不存在target', e);
 		return;
 	}
 
 	// 1. 收集沿途的事件
-	const { capture, bubble } = collectPaths(
+	const { bubble, capture } = collectPaths(
 		targetElement as DOMElement,
 		container,
 		eventType
 	);
 	// 2. 构造合成事件
 	const se = createSyntheticEvent(e);
-	// 3. 遍历 capture
+
+	// 3. 遍历captue
 	triggerEventFlow(capture, se);
+
 	if (!se.__stopPropagation) {
-		// 4. 遍历 bubble
+		// 4. 遍历bubble
 		triggerEventFlow(bubble, se);
 	}
 }
@@ -108,7 +110,7 @@ function collectPaths(
 		// 收集
 		const elementProps = targetElement[elementPropsKey];
 		if (elementProps) {
-			// click -> onClickCapture onClick
+			// click -> onClick onClickCapture
 			const callbackNameList = getEventCallbackNameFromEventType(eventType);
 			if (callbackNameList) {
 				callbackNameList.forEach((callbackName, i) => {

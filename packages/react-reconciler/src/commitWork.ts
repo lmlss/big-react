@@ -35,6 +35,7 @@ export const commitMutationEffects = (
 	nextEffect = finishedWork;
 
 	while (nextEffect !== null) {
+		// 向下遍历
 		const child: FiberNode | null = nextEffect.child;
 
 		if (
@@ -45,7 +46,7 @@ export const commitMutationEffects = (
 		} else {
 			// 向上遍历 DFS
 			up: while (nextEffect !== null) {
-				commitMutationEffectsOnFiber(nextEffect, root);
+				commitMutaitonEffectsOnFiber(nextEffect, root);
 				const sibling: FiberNode | null = nextEffect.sibling;
 
 				if (sibling !== null) {
@@ -58,7 +59,7 @@ export const commitMutationEffects = (
 	}
 };
 
-const commitMutationEffectsOnFiber = (
+const commitMutaitonEffectsOnFiber = (
 	finishedWork: FiberNode,
 	root: FiberRootNode
 ) => {
@@ -103,7 +104,7 @@ function commitPassiveEffect(
 	const updateQueue = fiber.updateQueue as FCUpdateQueue<any>;
 	if (updateQueue !== null) {
 		if (updateQueue.lastEffect === null && __DEV__) {
-			console.error('当 FC 存在 PassiveEffect flag 时, 不应该不存在 effect');
+			console.error('当FC存在PassiveEffect flag时，不应该不存在effect');
 		}
 		root.pendingPassiveEffects[type].push(updateQueue.lastEffect as Effect);
 	}
@@ -156,8 +157,8 @@ function recordHostChildrenToDelete(
 	childrenToDelete: FiberNode[],
 	unmountFiber: FiberNode
 ) {
-	// 1. 找到第一个 root host 节点
-	const lastOne = childrenToDelete.at(-1);
+	// 1. 找到第一个root host节点
+	const lastOne = childrenToDelete[childrenToDelete.length - 1];
 
 	if (!lastOne) {
 		childrenToDelete.push(unmountFiber);
@@ -171,7 +172,7 @@ function recordHostChildrenToDelete(
 		}
 	}
 
-	// 2. 每找到一个 host 节点, 判断该节点是不是 1 找到那个节点的兄弟节点
+	// 2. 每找到一个 host节点，判断下这个节点是不是 1 找到那个节点的兄弟节点
 }
 
 function commitDeletion(childToDelete: FiberNode, root: FiberRootNode) {
@@ -182,23 +183,23 @@ function commitDeletion(childToDelete: FiberNode, root: FiberRootNode) {
 		switch (unmountFiber.tag) {
 			case HostComponent:
 				recordHostChildrenToDelete(rootChildrenToDelete, unmountFiber);
-				// TODO 解绑 ref
+				// TODO 解绑ref
 				return;
 			case HostText:
 				recordHostChildrenToDelete(rootChildrenToDelete, unmountFiber);
 				return;
 			case FunctionComponent:
-				// TODO 解绑 ref
+				// TODO 解绑ref
 				commitPassiveEffect(unmountFiber, root, 'unmount');
 				return;
 			default:
 				if (__DEV__) {
-					console.warn('未处理的 unmount 类型', unmountFiber);
+					console.warn('未处理的unmount类型', unmountFiber);
 				}
 		}
 	});
 
-	// 移除 rootHostNode 的 DOM
+	// 移除rootHostComponent的DOM
 	if (rootChildrenToDelete.length) {
 		const hostParent = getHostParent(childToDelete);
 		if (hostParent !== null) {
@@ -243,10 +244,11 @@ function commitNestedComponent(
 
 const commitPlacement = (finishedWork: FiberNode) => {
 	if (__DEV__) {
-		console.warn('执行 Placement 操作', finishedWork);
+		console.warn('执行Placement操作', finishedWork);
 	}
 	// parent DOM
 	const hostParent = getHostParent(finishedWork);
+
 	// host sibling
 	const sibling = getHostSibling(finishedWork);
 
@@ -309,9 +311,8 @@ function getHostParent(fiber: FiberNode): Container | null {
 		parent = parent.return;
 	}
 	if (__DEV__) {
-		console.warn('未找到 host parent');
+		console.warn('未找到host parent');
 	}
-
 	return null;
 }
 
