@@ -22,7 +22,7 @@ const ReactElement = function (
 		key,
 		ref,
 		props,
-		__mark: 'KaSong'
+		__mark: 'lmlss'
 	};
 	return element;
 };
